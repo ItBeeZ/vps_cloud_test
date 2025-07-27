@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Név beküldése</title>
+</head>
+<body>
+  <h2>Kérlek, add meg a neved:</h2>
+  <form id="nameForm">
+    <input type="text" id="nameInput" required />
+    <button type="submit">Küldés</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('nameForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('nameInput').value;
+      const response = await fetch('http://localhost:5000/api/names', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      const result = await response.json();
+      if(result.success) {
+        document.getElementById('result').innerText = 'Sikeres mentés!';
+      } else {
+        document.getElementById('result').innerText = 'Hiba történt: ' + (result.error || 'Ismeretlen hiba');
+      }
+    });
+  </script>
+</body>
+</html>
